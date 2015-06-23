@@ -9,9 +9,8 @@ open import big-step
 
 noncanonical-tower : tower val → tower exp
 points (noncanonical-tower T) M N = Σ val λ M′ → Σ val λ N′ → (M ⇒ M′) × (N ⇒ N′) × points T M′ N′
-paths (noncanonical-tower T) α β α-wf β-wf = FIXME
-  where
-    postulate FIXME : _
+paths (noncanonical-tower T) α β (α′ , α′′ , α⇒α′ , α⇒α′′ , α′~α′′) (β′ , β′′ , β⇒β′ , β⇒β′′ , β′~β′′) =
+  noncanonical-tower (paths T α′ β′ (transport (sym (confluence α⇒α′ α⇒α′′)) α′~α′′) (transport (sym (confluence β⇒β′ β⇒β′′)) β′~β′′))
 
 record _type (A : exp) : Set₁ where
   field

@@ -41,7 +41,6 @@ instance
           paths seg-tower _ _ _ _ = trivial-tower
       paths Interval-tower _ _ _ _ = empty-tower
 
-
 instance
   paths-type : ∀ {A M N} {{A-type : A type}} {{_ : _∈_ M A {{A-type}}}} {{_ : _∈_ N A {{A-type}}}} → (` Paths A M N) type
   paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = Paths-tower}
