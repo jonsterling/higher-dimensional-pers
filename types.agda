@@ -18,7 +18,7 @@ paths empty-tower M N () _
 
 instance
   unit-type : (` unit) type
-  unit-type = record { type-evals = val⇒ ; canonical-tower = unit-tower }
+  unit-type = record { type-evals = val⇒ ; values = unit-tower }
     where
       unit-tower : tower val
       points unit-tower <> <> = Unit
@@ -27,7 +27,7 @@ instance
 
 instance
   interval-type : (` Interval) type
-  interval-type = record { type-evals = val⇒ ; canonical-tower = Interval-tower }
+  interval-type = record { type-evals = val⇒ ; values = Interval-tower }
     where
       Interval-tower : tower val
       points Interval-tower I0 I0 = Unit
@@ -44,11 +44,7 @@ instance
 
 instance
   paths-type : ∀ {A M N} {{A-type : A type}} {{_ : _∈_ M A {{A-type}}}} {{_ : _∈_ N A {{A-type}}}} → (` Paths A M N) type
-  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} =
-    record
-      { type-evals = val⇒
-      ; canonical-tower = Paths-tower
-      }
+  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = Paths-tower}
 
     where
       module A-type = _type A-type
@@ -56,8 +52,8 @@ instance
       module N∈A = _∈_ N∈A
 
       Paths-tower : tower val
-      points Paths-tower idpath idpath = points A-type.canonical-tower M∈A.value N∈A.value
-      points Paths-tower α β = points (paths A-type.canonical-tower M∈A.value N∈A.value M∈A.wf N∈A.wf) α β
+      points Paths-tower idpath idpath = points A-type.values M∈A.value N∈A.value
+      points Paths-tower α β = points (paths A-type.values M∈A.value N∈A.value M∈A.wf N∈A.wf) α β
       paths Paths-tower α β α-wf β-wf = FIXME -- Paths-tower (paths A M N M-wf N-wf) α β α-wf β-wf
         where postulate FIXME : _
 
