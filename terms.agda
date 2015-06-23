@@ -8,7 +8,6 @@ mutual
     su : exp → val
     idpath : val
     Paths : exp → exp → exp → val
-    Interval I0 I1 seg : val
 
   data exp : Set where
     `_ : val → exp
