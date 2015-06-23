@@ -20,36 +20,26 @@ points-sym empty-tower ()
 points-trans empty-tower () _
 paths empty-tower M N () _
 
+data idpath-tower-points : val → val → Set where
+  idpath : idpath-tower-points idpath idpath
+
 idpath-tower : tower val
-points idpath-tower idpath idpath = Unit
-points idpath-tower M N = Void
-points-sym idpath-tower {idpath} {idpath} P = tt
-points-sym idpath-tower {idpath} {unit} ()
-points-sym idpath-tower {idpath} {void} ()
-points-sym idpath-tower {idpath} {<>} ()
-points-sym idpath-tower {idpath} {ze} ()
-points-sym idpath-tower {idpath} {su x} ()
-points-sym idpath-tower {idpath} {Paths x x₁ x₂} ()
-points-sym idpath-tower {unit} ()
-points-sym idpath-tower {void} ()
-points-sym idpath-tower {<>} ()
-points-sym idpath-tower {ze} ()
-points-sym idpath-tower {su x} ()
-points-sym idpath-tower {Paths x x₁ x₂} ()
-points-trans idpath-tower = Admit
-  where
-    postulate Admit : _
+points idpath-tower = idpath-tower-points
+points-sym idpath-tower idpath = idpath
+points-trans idpath-tower idpath idpath = idpath
 paths idpath-tower M N M-wf N-wf = idpath-tower
+
+data unit-tower-points : val → val → Set where
+  <> : unit-tower-points <> <>
 
 instance
   unit-type : (` unit) type
   unit-type = record { type-evals = val⇒ ; values = unit-tower }
     where
       unit-tower : tower val
-      points unit-tower <> <> = Unit
-      points unit-tower M N = Void
-      points-sym unit-tower _ = Admit where postulate Admit : _
-      points-trans unit-tower _ _ = Admit where postulate Admit : _
+      points unit-tower = unit-tower-points
+      points-sym unit-tower <> = <>
+      points-trans unit-tower <> <> = <>
       paths unit-tower M N M-wf N-wf = idpath-tower
 
 instance
@@ -62,8 +52,8 @@ instance
 
       Paths-tower : {M N : val} (A : tower val) → points A M M → points A N N → tower val
       points (Paths-tower {M} {N} A M∈A N∈A) α β = points (paths A M N M∈A N∈A) α β
-      points-sym (Paths-tower _ _ _) = Admit where postulate Admit : _
-      points-trans (Paths-tower _ _ _) = Admit where postulate Admit : _
+      points-sym (Paths-tower {M} {N} A M∈A N∈A) = points-sym (paths A M N M∈A N∈A)
+      points-trans (Paths-tower {M} {N} A M∈A N∈A) = points-trans (paths A M N M∈A N∈A)
       paths (Paths-tower A M∈A N∈A) α β α-wf β-wf = Paths-tower (paths A _ _ M∈A N∈A) α-wf β-wf
 
 instance
