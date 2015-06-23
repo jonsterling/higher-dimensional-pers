@@ -44,17 +44,11 @@ instance
 
 instance
   paths-type : ∀ {A M N} {{A-type : A type}} {{M∈A : _∈_ M A {{A-type}}}} {{N∈A : _∈_ N A {{A-type}}}} → (` Paths A M N) type
-  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = Paths-tower A-type.values M∈A.membership.wf-val1 N∈A.membership.wf-val1}
+  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = paths A-type.values M∈A.membership.val1 N∈A.membership.val1 M∈A.membership.wf-val1 N∈A.membership.wf-val1}
     where
       module A-type = _type A-type
       module M∈A = _∈_ M∈A
       module N∈A = _∈_ N∈A
-
-      Paths-tower : {M N : val} (A : tower val) → points A M M → points A N N → tower val
-      points (Paths-tower {M} {N} A M∈A N∈A) α β = points (paths A M N M∈A N∈A) α β
-      points-sym (Paths-tower {M} {N} A M∈A N∈A) = points-sym (paths A M N M∈A N∈A)
-      points-trans (Paths-tower {M} {N} A M∈A N∈A) = points-trans (paths A M N M∈A N∈A)
-      paths (Paths-tower A M∈A N∈A) α β α-wf β-wf = Paths-tower (paths A _ _ M∈A N∈A) α-wf β-wf
 
 instance
   <>-∈-unit : ` <> ∈ ` unit
