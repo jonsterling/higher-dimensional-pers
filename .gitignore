@@ -1,0 +1,6 @@
+*.agdai
+*.fdb_latexmk
+*.aux
+*.fls
+*.log
+
