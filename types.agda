@@ -5,16 +5,16 @@ module types where
 open import pervasives
 open import terms
 open import big-step
-open import tower
+open import infinity-per
 open import meaning-explanations
 
-trivial-tower : tower val
+trivial-tower : ∞-per val
 points trivial-tower M N = Unit
 points-sym trivial-tower _ = tt
 points-trans trivial-tower _ _ = tt
 paths trivial-tower M N _ _ = trivial-tower
 
-empty-tower : tower val
+empty-tower : ∞-per val
 points empty-tower _ _ = Void
 points-sym empty-tower ()
 points-trans empty-tower () _
@@ -23,7 +23,7 @@ paths empty-tower M N () _
 data idpath-tower-points : val → val → Set where
   idpath : idpath-tower-points idpath idpath
 
-idpath-tower : tower val
+idpath-tower : ∞-per val
 points idpath-tower = idpath-tower-points
 points-sym idpath-tower idpath = idpath
 points-trans idpath-tower idpath idpath = idpath
@@ -36,7 +36,7 @@ instance
   unit-type : (` unit) type
   unit-type = record { type-evals = val⇒ ; values = unit-tower }
     where
-      unit-tower : tower val
+      unit-tower : ∞-per val
       points unit-tower = unit-tower-points
       points-sym unit-tower <> = <>
       points-trans unit-tower <> <> = <>

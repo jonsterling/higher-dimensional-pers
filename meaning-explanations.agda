@@ -3,11 +3,11 @@
 module meaning-explanations where
 
 open import pervasives
-open import tower
+open import infinity-per
 open import terms
 open import big-step
 
-record is-point (T : tower val) (M N : exp) : Set where
+record is-point (T : ∞-per val) (M N : exp) : Set where
   field
     {val1} : val
     {val2} : val
@@ -21,13 +21,13 @@ record is-point (T : tower val) (M N : exp) : Set where
   wf-val2 : points T val2 val2
   wf-val2 = points-trans T (points-sym T wf) wf
 
-is-point-sym : {T : tower val} {M N : exp} → is-point T M N → is-point T N M
+is-point-sym : {T : ∞-per val} {M N : exp} → is-point T M N → is-point T N M
 is-point-sym {T = T} X =
   record { eval1 = eval2 ; eval2 = eval1 ; wf = points-sym T wf }
   where
     open is-point X
 
-is-point-trans : {T : tower val} {M N O : exp} → is-point T M N → is-point T N O → is-point T M O
+is-point-trans : {T : ∞-per val} {M N O : exp} → is-point T M N → is-point T N O → is-point T M O
 is-point-trans {T = T} X Y =
   record { eval1 = X.eval1 ; eval2 = Y.eval2 ; wf = points-trans T X.wf (transport (sym (confluence X.eval2 Y.eval1)) Y.wf) }
   where
@@ -35,7 +35,7 @@ is-point-trans {T = T} X Y =
     module Y = is-point Y
 
 
-noncanonical-tower : tower val → tower exp
+noncanonical-tower : ∞-per val → ∞-per exp
 points (noncanonical-tower T) = is-point T
 points-sym (noncanonical-tower T) = is-point-sym
 points-trans (noncanonical-tower T) = is-point-trans
@@ -48,9 +48,9 @@ record _type (A : exp) : Set₁ where
   field
     {type-val} : val
     type-evals : A ⇒ type-val
-    values : tower val
+    values : ∞-per val
 
-  expressions : tower exp
+  expressions : ∞-per exp
   expressions = noncanonical-tower values
 
 record _≡_∈_ (M N A : exp) {{A-type : A type}} : Set where
