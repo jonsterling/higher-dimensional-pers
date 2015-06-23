@@ -54,7 +54,7 @@ instance
 
 instance
   paths-type : ∀ {A M N} {{A-type : A type}} {{M∈A : _∈_ M A {{A-type}}}} {{N∈A : _∈_ N A {{A-type}}}} → (` Paths A M N) type
-  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = Paths-tower A-type.values M∈A.membership.wf-val1 N∈A.membership.wf-val1} -- (_∈_.membership.wf M∈A) (_∈_.membership.wf N∈A)}
+  paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = Paths-tower A-type.values M∈A.membership.wf-val1 N∈A.membership.wf-val1}
     where
       module A-type = _type A-type
       module M∈A = _∈_ M∈A
