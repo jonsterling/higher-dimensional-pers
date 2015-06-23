@@ -7,6 +7,7 @@ open import infinity-per
 open import terms
 open import big-step
 
+-- Expresses the judgement that M and N are strictly equal points of the ∞-per T.
 record is-point (T : ∞-per val) (M N : exp) : Set where
   field
     {val1} : val
@@ -34,7 +35,7 @@ is-point-trans {T = T} X Y =
     module X = is-point X
     module Y = is-point Y
 
-
+-- For every ∞-per of canonical forms, there is an ∞-per of non-canonical forms, using computation.
 noncanonical-tower : ∞-per val → ∞-per exp
 points (noncanonical-tower T) = is-point T
 points-sym (noncanonical-tower T) = is-point-sym
@@ -44,6 +45,7 @@ paths (noncanonical-tower T) α β P Q =
   where
     module P = is-point P ; module Q = is-point Q
 
+-- To know «A type» is to know that «A ⇒ A'» such that A' has an ∞-per of its canonical verifications and their canonical identifications.
 record _type (A : exp) : Set₁ where
   field
     {type-val} : val
@@ -53,11 +55,15 @@ record _type (A : exp) : Set₁ where
   expressions : ∞-per exp
   expressions = noncanonical-tower values
 
+-- To know «M ≡ N ∈ A» (presupposing «A type») is to know that M and N are strictly equal points in the ∞-per denoted by A.
 record _≡_∈_ (M N A : exp) {{A-type : A type}} : Set where
   module A-type = _type A-type
   field
     membership : points A-type.expressions M N
 
+  module membership = is-point membership
+
+-- To know «M ∈ A» (presupposing «A type») is to know that M and itself are strictly equal points in the ∞-per denoted by A.
 record _∈_ (M A : exp) {{A-type : A type}} : Set where
   module A-type = _type A-type
   field
