@@ -8,41 +8,31 @@ open import big-step
 open import infinity-per
 open import meaning-explanations
 
-trivial-tower : ∞-per val
-points trivial-tower M N = Unit
-points-sym trivial-tower _ = tt
-points-trans trivial-tower _ _ = tt
-paths trivial-tower M N _ _ = trivial-tower
-
-empty-tower : ∞-per val
-points empty-tower _ _ = Void
-points-sym empty-tower ()
-points-trans empty-tower () _
-paths empty-tower M N () _
-
-data idpath-tower-points : val → val → Set where
-  idpath : idpath-tower-points idpath idpath
-
-idpath-tower : ∞-per val
-points idpath-tower = idpath-tower-points
-points-sym idpath-tower idpath = idpath
-points-trans idpath-tower idpath idpath = idpath
-paths idpath-tower M N M-wf N-wf = idpath-tower
-
 data unit-tower-points : val → val → Set where
   <> : unit-tower-points <> <>
 
+data unit-tower-paths : val → val → Set where
+  idpath : unit-tower-paths idpath idpath
+
 instance
+  -- The judgement «unit type» is made evident by exhibiting its (mostly trivial) ∞-per:
   unit-type : (` unit) type
   unit-type = record { type-evals = val⇒ ; values = unit-tower }
     where
+      unit-paths-tower : ∞-per val
+      points unit-paths-tower = unit-tower-paths
+      points-sym unit-paths-tower idpath = idpath
+      points-trans unit-paths-tower idpath idpath = idpath
+      paths unit-paths-tower _ _ _ _ = unit-paths-tower
+
       unit-tower : ∞-per val
       points unit-tower = unit-tower-points
       points-sym unit-tower <> = <>
       points-trans unit-tower <> <> = <>
-      paths unit-tower M N M-wf N-wf = idpath-tower
+      paths unit-tower M N M-wf N-wf = unit-paths-tower
 
 instance
+  -- The judgement «paths A M N type (A type, M ∈ A, N ∈ A)» is evident, since the path space of a type is given by pushing taking the tail of its ∞-per.
   paths-type : ∀ {A M N} {{A-type : A type}} {{M∈A : _∈_ M A {{A-type}}}} {{N∈A : _∈_ N A {{A-type}}}} → (` Paths A M N) type
   paths-type {A} {M} {N} {{A-type}} {{M∈A}} {{N∈A}} = record { type-evals = val⇒ ; values = paths A-type.values M∈A.membership.val1 N∈A.membership.val1 M∈A.membership.wf-val1 N∈A.membership.wf-val1}
     where
@@ -50,6 +40,8 @@ instance
       module M∈A = _∈_ M∈A
       module N∈A = _∈_ N∈A
 
+
+-- some examples
 instance
   <>-∈-unit : ` <> ∈ ` unit
   <>-∈-unit = record { membership = record {} }
